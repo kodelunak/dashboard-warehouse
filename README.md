@@ -16,7 +16,7 @@ Project ini dibangun menggunakan **Laravel 12 + TailwindCSS**.
     ```bash
     npm install
     ```
-4. Buat database dengan nama rapi-database
+4. Buat database dengan nama dahsboard-warehouse
 
 5. Copy file .env.example menjadi .env
     ```bash
@@ -44,4 +44,4 @@ Project ini dibangun menggunakan **Laravel 12 + TailwindCSS**.
     ```bash
     php artisan db:seed
     ```  
-10. Selesai, selamat anda telah berhasil install project Rapi App.
+10. Selesai, selamat anda telah berhasil install project Dashboard Warehouse.
