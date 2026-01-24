@@ -2,7 +2,7 @@
 
 Project ini dibangun menggunakan **Laravel 12 + TailwindCSS**.
 
-## Cara Install Project Rapi App
+## Cara Install Project Dashboard Warehouse
 
 1. Clone repository:
     ```bash
