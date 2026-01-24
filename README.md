@@ -1,4 +1,4 @@
-# Install Laravel Rapi App
+# Install Laravel Dashboard Warehouse
 
 Project ini dibangun menggunakan **Laravel 12 + TailwindCSS**.
 
