@@ -10,18 +10,23 @@ class RolePermissionSeeder extends Seeder
 {
     public function run(): void
     {
-        // Define roles
+        // =========================
+        // ROLES
+        // =========================
         $roles = [
             'super-admin',
             'admin',
+            'demo',
         ];
 
-        // Define permissions per your sidebar spec
+        // =========================
+        // PERMISSIONS
+        // =========================
         $permissions = [
-            // User management (super admin only)
+            // User management
             'users.view', 'users.create', 'users.update', 'users.delete',
 
-            // Roles & Permissions (super admin only)
+            // Roles & Permissions
             'roles.view', 'roles.create', 'roles.update', 'roles.delete',
             'permissions.view', 'permissions.create', 'permissions.update', 'permissions.delete',
             'user-roles.update',
@@ -33,8 +38,10 @@ class RolePermissionSeeder extends Seeder
 
             // Penjualan
             'monthly-target.view', 'monthly-target.create', 'monthly-target.update', 'monthly-target.delete',
-            'invoices.view', 'invoices.create', 'invoices.update', 'invoices.setor', 'invoices.setor-update', 'invoices.delete', 'invoices.report',
-            'surat-jalan.view', 'surat-jalan.create', 'surat-jalan.update', 'surat-jalan.delete', 'surat-jalan.report',
+            'invoices.view', 'invoices.create', 'invoices.update', 'invoices.setor',
+            'invoices.setor-update', 'invoices.delete', 'invoices.report',
+            'surat-jalan.view', 'surat-jalan.create', 'surat-jalan.update',
+            'surat-jalan.delete', 'surat-jalan.report',
             'transactions.view', 'transactions.create',
 
             // Finance
@@ -46,39 +53,68 @@ class RolePermissionSeeder extends Seeder
             'customers.view', 'customers.create', 'customers.update', 'customers.delete',
         ];
 
-        // Create permissions
-        foreach ($permissions as $perm) {
-            Permission::findOrCreate($perm, 'web');
+        // =========================
+        // CREATE PERMISSIONS
+        // =========================
+        foreach ($permissions as $permission) {
+            Permission::findOrCreate($permission, 'web');
         }
 
-        // Create roles
-        foreach ($roles as $r) {
-            Role::findOrCreate($r, 'web');
+        // =========================
+        // CREATE ROLES
+        // =========================
+        foreach ($roles as $role) {
+            Role::findOrCreate($role, 'web');
         }
 
-        // Assign permissions to roles
+        // =========================
+        // ASSIGN PERMISSIONS
+        // =========================
         $super = Role::findByName('super-admin', 'web');
         $admin = Role::findByName('admin', 'web');
+        $demo  = Role::findByName('demo', 'web');
 
-        // Super admin gets everything
+        // 🔥 Super Admin → ALL ACCESS
         $super->syncPermissions(Permission::all());
 
-        // Admin gets a subset
-        $adminPermissions = [
-            // Master Products
+        // 🟡 Admin → Limited CRUD
+        $admin->syncPermissions([
             'product-batches.view', 'product-batches.create', 'product-batches.update', 'product-batches.delete',
             'product-batches.report',
-            // Penjualan
+
             'monthly-target.view',
-            'invoices.view', 'invoices.create', 'invoices.update', 'invoices.setor', 'invoices.delete', 'invoices.report',
-            'surat-jalan.view', 'surat-jalan.create', 'surat-jalan.update', 'surat-jalan.delete', 'surat-jalan.report',
+            'invoices.view', 'invoices.create', 'invoices.update',
+            'invoices.setor', 'invoices.delete', 'invoices.report',
+
+            'surat-jalan.view', 'surat-jalan.create', 'surat-jalan.update',
+            'surat-jalan.delete', 'surat-jalan.report',
+
             'transactions.view', 'transactions.create',
-            // Finance (Input Keuangan + History)
+
             'finance.input.view', 'finance.input.create', 'finance.input.update', 'finance.input.delete',
             'finance.history',
+
+            'customers.view',
+        ]);
+
+        // 🟢 DEMO → VIEW ONLY
+        $demo->syncPermissions([
+            // Products
+            'products.view',
+            'product-batches.view',
+
+            // Penjualan
+            'monthly-target.view',
+            'invoices.view',
+            'surat-jalan.view',
+            'transactions.view',
+
+            // Finance (opsional, kalau mau tampil dashboard saja)
+            'budget-target.view',
+            'finance.input.view',
+
             // Customer
             'customers.view',
-        ];
-        $admin->syncPermissions($adminPermissions);
+        ]);
     }
 }

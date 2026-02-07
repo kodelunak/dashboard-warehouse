@@ -11,76 +11,62 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        // Ensure roles exist (seeded by RolePermissionSeeder)
+        // Pastikan role sudah ada
         $superRole = Role::findByName('super-admin', 'web');
         $adminRole = Role::findByName('admin', 'web');
+        $demoRole = Role::findByName('demo', 'web');
 
         // ============================================
-        // SUPER ADMIN ACCOUNTS (3 users)
+        // SUPER ADMIN
         // ============================================
-
-        // 1. Pa Ipong (Super Admin)
-        $paIpong = User::firstOrCreate(
-            ['email' => 'ipong@gmail.com'],
+        $superAdmin = User::firstOrCreate(
+            ['email' => 'superadmin@gmail.com'],
             [
-                'name' => 'Ipong',
+                'name' => 'Super Admin',
                 'password' => Hash::make('password'),
                 'status' => 'active',
             ]
         );
-        if (!$paIpong->hasRole($superRole->name)) {
-            $paIpong->assignRole($superRole);
-        }
 
-        // 2. Pa Adi (Super Admin)
-        $paAdi = User::firstOrCreate(
-            ['email' => 'adhi@gmail.com'],
-            [
-                'name' => 'Adhi',
-                'password' => Hash::make('password'),
-                'status' => 'active',
-            ]
-        );
-        if (!$paAdi->hasRole($superRole->name)) {
-            $paAdi->assignRole($superRole);
-        }
-
-        // 3.  Bagas (Super Admin)
-        $bagas = User::firstOrCreate(
-            ['email' => 'bagas@gmail.com'],
-            [
-                'name' => 'Bagas',
-                'password' => Hash::make('password'),
-                'status' => 'active',
-            ]
-        );
-        if (!$bagas->hasRole($superRole->name)) {
-            $bagas->assignRole($superRole);
+        if (!$superAdmin->hasRole($superRole->name)) {
+            $superAdmin->assignRole($superRole);
         }
 
         // ============================================
-        // ADMIN ACCOUNT (1 user)
+        // ADMIN
         // ============================================
-
-        // 4. Bule (Admin)
-        $lutfi = User::firstOrCreate(
-            ['email' => 'lutfi@gmail.com'],
+        $admin = User::firstOrCreate(
+            ['email' => 'admin@gmail.com'],
             [
-                'name' => 'Lutfi',
+                'name' => 'Admin',
                 'password' => Hash::make('password'),
                 'status' => 'active',
             ]
         );
-        if (!$lutfi->hasRole($adminRole->name)) {
-            $lutfi->assignRole($adminRole);
+
+        if (!$admin->hasRole($adminRole->name)) {
+            $admin->assignRole($adminRole);
         }
+
+        // ============================================
+        // DEMO USER (tanpa role / optional admin)
+        // ============================================
+        $demo = User::firstOrCreate(
+            ['email' => 'demo@gmail.com'],
+            [
+                'name' => 'Demo User',
+                'password' => Hash::make('password'),
+                'status' => 'active',
+            ]
+        );
+
+        $demo->assignRole($demoRole);
 
         // Output info
         $this->command->info('✅ Default users created successfully:');
-        $this->command->info('   - Pa Ipong (Super Admin): ipong@gmail.com');
-        $this->command->info('   - Pa Adhi (Super Admin): adhi@gmail.com');
-        $this->command->info('   - Bagas (Super Admin): bagas@gmail.com');
-        $this->command->info('   - Lutfi (Admin): lutfi@gmail.com');
+        $this->command->info('   - Super Admin: superadmin@gmail.com');
+        $this->command->info('   - Admin: admin@gmail.com');
+        $this->command->info('   - Demo: demo@gmail.com');
         $this->command->info('   Default password: password');
     }
 }
