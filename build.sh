@@ -39,32 +39,32 @@ sleep 8
 
 echo ""
 echo "🔑 Generating APP_KEY if needed..."
-docker exec laravel_staging php artisan key:generate --force
+docker exec dashboard-warehouse php artisan key:generate --force
 
 echo ""
 echo "📦 Building Vite assets..."
-docker exec laravel_staging npm run build
+docker exec dashboard-warehouse npm run build
 
 echo ""
 echo "✅ Verifying manifest.json..."
-if docker exec laravel_staging test -f /var/www/public/build/manifest.json; then
+if docker exec dashboard-warehouse test -f /var/www/public/build/manifest.json; then
     echo "✅ manifest.json found!"
 else
     echo "⚠️  manifest.json not found, retrying build..."
-    docker exec laravel_staging npm install
-    docker exec laravel_staging npm run build
+    docker exec dashboard-warehouse npm install
+    docker exec dashboard-warehouse npm run build
 fi
 
 echo ""
 echo "🔧 Fixing permissions..."
-docker exec laravel_staging chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache /var/www/public/build 2>/dev/null || true
-docker exec laravel_staging chmod -R 775 /var/www/storage /var/www/bootstrap/cache
+docker exec dashboard-warehouse chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache /var/www/public/build 2>/dev/null || true
+docker exec dashboard-warehouse chmod -R 775 /var/www/storage /var/www/bootstrap/cache
 
 echo ""
 echo "🧹 Clearing Laravel cache..."
-docker exec laravel_staging php artisan config:clear
-docker exec laravel_staging php artisan view:clear
-docker exec laravel_staging php artisan cache:clear
+docker exec dashboard-warehouse php artisan config:clear
+docker exec dashboard-warehouse php artisan view:clear
+docker exec dashboard-warehouse php artisan cache:clear
 
 echo ""
 echo "🔄 Final restart..."
@@ -80,12 +80,12 @@ echo "✅ Laravel staging is ready!"
 echo "=========================================="
 echo ""
 echo "📍 Access URL:"
-echo "   Local:     http://localhost:4567"
-echo "   Tailscale: http://YOUR_TAILSCALE_IP:4567"
+echo "   Local:     http://localhost:2345"
+echo "   Tailscale: http://YOUR_TAILSCALE_IP:2345"
 echo ""
 echo "📊 Useful commands:"
 echo "   Logs:      docker-compose logs -f"
-echo "   Enter:     docker exec -it laravel_staging bash"
+echo "   Enter:     docker exec -it dashboard-warehouse bash"
 echo "   Rebuild:   ./build.sh"
 echo "   Stop:      docker-compose down"
 echo ""
